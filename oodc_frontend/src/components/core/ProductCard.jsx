@@ -17,7 +17,7 @@ import { Trash2, FilePenLine } from 'lucide-react';
 import AppContext                           from '../../utils/AppContext';
 
 
-export default function ProductCard({ data }) {
+export default function ProductCard({ data, getProductId }) {
 
   const { user } = useContext(AppContext);
 
@@ -37,7 +37,7 @@ export default function ProductCard({ data }) {
       <CardFooter>
         {user.isAdmin && (
           <div className='flex items-center justify-between gap-2'>
-            <Button variant='outline' size='icon'>
+            <Button variant='outline' size='icon' onClick={() => getProductId(data.id)}>
               <Trash2/>
             </Button>
             <Button variant='outline' size='icon'>

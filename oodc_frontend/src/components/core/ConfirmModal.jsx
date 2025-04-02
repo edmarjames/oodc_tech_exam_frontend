@@ -12,11 +12,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { LogOut } from 'lucide-react';
-import { Button } from "@/components/ui/button";
 
 
-export default function ConfirmModal({ usage, clickEvent }) {
+export default function ConfirmModal({ usage, clickEvent, isOpen, onClose, triggerElement }) {
 
   const logoutText = {
     title: 'Are you sure you want to logout?',
@@ -30,11 +28,9 @@ export default function ConfirmModal({ usage, clickEvent }) {
   };
 
   return (
-    <AlertDialog>
+    <AlertDialog open={isOpen} onOpenChange={(open) => onClose(open)}>
       <AlertDialogTrigger asChild>
-        <Button variant='outline' size='icon'>
-          <LogOut />
-        </Button>
+        {triggerElement}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

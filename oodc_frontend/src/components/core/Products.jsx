@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, useContext } from 'react';
 
 // external imports
 import { Button } from "@/components/ui/button";
-
+import { Trash2, LogOut } from 'lucide-react';
 
 import {
   useInfiniteQuery,
@@ -20,6 +20,10 @@ import ProductCard from './ProductCard';
 
 
 export default function Products() {
+
+  const [deleteId, setDeleteId] = useState(null);
+  const [modalUsage, setModalUsage] = useState('logout');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const queryClient = useQueryClient();
   const observerRef = useRef();
@@ -52,6 +56,18 @@ export default function Products() {
 
   const flattenedData = data?.pages.flatMap(page => page.results) || [];
 
+  const handleDeleteProduct = (deleteId) => {
+    setIsModalOpen(true);
+    setModalUsage('delete');
+    setDeleteId(deleteId);
+  };
+
+  const logoutTriggerElement = (
+    <Button variant='outline' size='icon' onClick={() => setIsModalOpen(true)}>
+      <LogOut />
+    </Button>
+  );
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -75,6 +91,13 @@ export default function Products() {
 
   return (
     <>
+      <ConfirmModal
+        usage='delete'
+        // clickEvent={confirmDelete}
+        isOpen={isModalOpen && modalUsage === 'delete'}
+        onClose={(open) => setIsModalOpen(open)}
+        triggerElement={null}
+      />
       <div className='flex items-center justify-between gap-2'>
         <h1 className='text-2xl font-bold mt-5 ml-7'>Product Management Tool</h1>
         {user?.username === null ? (
@@ -82,14 +105,20 @@ export default function Products() {
         ) : (
           <div className='flex items-center gap-2 mt-5 mr-7'>
             <Button>Add product</Button>
-            <ConfirmModal usage='logout' clickEvent={handleLogout}/>
+            <ConfirmModal
+              usage='logout'
+              clickEvent={handleLogout}
+              isOpen={isModalOpen && modalUsage === 'logout'}
+              onClose={(open) => setIsModalOpen(open)}
+              triggerElement={logoutTriggerElement}
+            />
           </div>
         )}
       </div>
       <div className='h-screen'>
         <div className='m-7 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5'>
           {flattenedData?.map((product) => (
-            <ProductCard key={product.id} data={product}/>
+            <ProductCard key={product.id} getProductId={handleDeleteProduct} data={product}/>
           ))}
         </div>
         <div

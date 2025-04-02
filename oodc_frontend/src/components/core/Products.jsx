@@ -11,6 +11,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { LogOut } from 'lucide-react';
+import { ChevronRight } from "lucide-react"
 
 import {
   useInfiniteQuery,
@@ -77,7 +85,21 @@ export default function Products() {
         {user?.username === null ? (
           <LoginModal/>
         ) : (
-          <Button className='my-2 mr-3'>Add product</Button>
+          <div className='flex items-center gap-2 mt-5 mr-7'>
+            <Button>Add product</Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant='outline' size='icon'>
+                    <LogOut />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Logout</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         )}
       </div>
       <div className='h-screen'>

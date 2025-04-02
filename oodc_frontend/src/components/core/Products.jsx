@@ -3,14 +3,7 @@ import { useEffect, useState, useRef, useContext } from 'react';
 
 // external imports
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 
 import {
   useInfiniteQuery,
@@ -23,6 +16,7 @@ import axios from 'axios';
 import AppContext                           from '../../utils/AppContext';
 import LoginModal from './LoginModal';
 import ConfirmModal from './ConfirmModal';
+import ProductCard from './ProductCard';
 
 
 export default function Products() {
@@ -95,18 +89,7 @@ export default function Products() {
       <div className='h-screen'>
         <div className='m-7 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5'>
           {flattenedData?.map((product) => (
-            <Card key={product.id} className='w-auto h-100'>
-              <CardHeader>
-                <CardTitle>{product.name}</CardTitle>
-                <CardDescription>{product.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>Card Content</p>
-              </CardContent>
-              <CardFooter>
-                <p>Card Footer</p>
-              </CardFooter>
-            </Card>
+            <ProductCard key={product.id} data={product}/>
           ))}
         </div>
         <div

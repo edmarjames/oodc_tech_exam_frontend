@@ -1,10 +1,19 @@
-import { useState } from 'react'
-import './App.css'
+// react imports
+import { useState } from 'react';
+
+// external imports
+
+
+// internal imports
+import './App.css';
+
 
 function App() {
 
   return (
-    <h1>Product Management Tool</h1>
+    <>
+      <h1>Product Management Tool</h1>
+    </>
   )
 }
 

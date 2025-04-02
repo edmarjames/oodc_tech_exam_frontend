@@ -11,23 +11,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { LogOut } from 'lucide-react';
-import { ChevronRight } from "lucide-react"
 
 import {
   useInfiniteQuery,
   useQueryClient,
 }                                           from '@tanstack/react-query';
+import { useNavigate }                      from 'react-router-dom';
 
 // internal imports
 import AppContext                           from '../../utils/AppContext';
 import LoginModal from './LoginModal';
+import ConfirmModal from './ConfirmModal';
 
 
 export default function Products() {
@@ -35,10 +29,14 @@ export default function Products() {
   const queryClient = useQueryClient();
   const observerRef = useRef();
   const { user } = useContext(AppContext);
+  const navigate = useNavigate();
 
   function fetchProducts({ pageParam = 1 }) {
     return fetch(`http://127.0.0.1:8000/products/?page=${pageParam}`)
       .then(res => res.json())
+  };
+  function handleLogout() {
+    navigate('/logout');
   };
 
   const {
@@ -87,18 +85,7 @@ export default function Products() {
         ) : (
           <div className='flex items-center gap-2 mt-5 mr-7'>
             <Button>Add product</Button>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant='outline' size='icon'>
-                    <LogOut />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Logout</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <ConfirmModal usage='logout' clickEvent={handleLogout}/>
           </div>
         )}
       </div>

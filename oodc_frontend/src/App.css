@@ -3,6 +3,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+#observer-ref {
+  height: 1px;
+  margin: 20px 0;
+  background-color: transparent;
+}
+
 /* #root {
   max-width: 1280px;
   margin: 0 auto;

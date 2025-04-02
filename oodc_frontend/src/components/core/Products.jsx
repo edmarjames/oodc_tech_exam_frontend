@@ -17,6 +17,7 @@ import {
   useQueryClient,
 }                                           from '@tanstack/react-query';
 import { useNavigate }                      from 'react-router-dom';
+import axios from 'axios';
 
 // internal imports
 import AppContext                           from '../../utils/AppContext';
@@ -31,9 +32,11 @@ export default function Products() {
   const { user } = useContext(AppContext);
   const navigate = useNavigate();
 
-  function fetchProducts({ pageParam = 1 }) {
-    return fetch(`http://127.0.0.1:8000/products/?page=${pageParam}`)
-      .then(res => res.json())
+  async function fetchProducts({ pageParam = 1 }) {
+    return axios.get('http://127.0.0.1:8000/products/', {
+      params: { page: pageParam },
+    })
+    .then(res => res.data);
   };
   function handleLogout() {
     navigate('/logout');

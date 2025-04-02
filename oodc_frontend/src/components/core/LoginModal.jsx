@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import axios from 'axios';
 
 // internal imports
 import AppContext from '../../utils/AppContext';
@@ -30,19 +31,13 @@ export default function LoginModal() {
     setUsername('');
     setPassword('');
   };
-  const handleSubmit = () => {
-    fetch('http://127.0.0.1:8000/login/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
+  async function handleSubmit() {
+    try {
+      const res = await axios.post('http://127.0.0.1:8000/login/', {
+        username,
+        password,
+      });
+      const data = res.data;
       if (data?.message == 'Login successful') {
         setUser({
           username: username,
@@ -50,12 +45,15 @@ export default function LoginModal() {
         });
         localStorage.setItem('username', username);
         localStorage.setItem('isAdmin', true);
-        resetStates();
       } else if (data?.error) {
         setError(data?.error);
-        resetStates();
       };
-    })
+    } catch (error) {
+      console.error('Login failed', error);
+      setError(error?.response?.data?.error);
+    } finally {
+      resetStates();
+    }
   };
 
   return (

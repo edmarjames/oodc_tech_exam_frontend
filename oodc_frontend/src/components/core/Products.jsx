@@ -7,6 +7,7 @@ import { Trash2, LogOut } from 'lucide-react';
 
 import {
   useInfiniteQuery,
+  useMutation,
   useQueryClient,
 }                                           from '@tanstack/react-query';
 import { useNavigate }                      from 'react-router-dom';
@@ -40,6 +41,36 @@ export default function Products() {
     navigate('/logout');
   };
 
+  const deleteProductMutation = useMutation({
+    mutationFn: async (deleteId) => {
+      try {
+        await axios.delete(`http://127.0.0.1:8000/products/${deleteId}/`);
+      } catch (error) {
+        throw new Error('Failed to delete product');
+      }
+    },
+    onSuccess: (data, deleteId) => {
+      queryClient.setQueryData(['products', 'infinite'], (oldData) => {
+        if (!oldData || !oldData.pages) return oldData;
+
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page) => ({
+            ...page,
+            results: Array.isArray(page.results) ?
+              page.results.filter((product) => product.id !== deleteId)
+              : [],
+          })),
+        };
+      });
+
+      queryClient.invalidateQueries(['products', 'infinite'], { exact: true });
+    },
+    onError: (error) => {
+      console.error('Error deleting product:', error);
+    },
+  });
+
   const {
       data,
       fetchNextPage,
@@ -60,6 +91,9 @@ export default function Products() {
     setIsModalOpen(true);
     setModalUsage('delete');
     setDeleteId(deleteId);
+  };
+  const handleDelete = (deleteId) => {
+    deleteProductMutation.mutate(deleteId);
   };
 
   const logoutTriggerElement = (
@@ -93,7 +127,7 @@ export default function Products() {
     <>
       <ConfirmModal
         usage='delete'
-        // clickEvent={confirmDelete}
+        clickEvent={() => handleDelete(deleteId)}
         isOpen={isModalOpen && modalUsage === 'delete'}
         onClose={(open) => setIsModalOpen(open)}
         triggerElement={null}

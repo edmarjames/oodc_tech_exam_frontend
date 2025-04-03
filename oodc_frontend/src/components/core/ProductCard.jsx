@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Trash2, FilePenLine } from 'lucide-react';
+import { Link, NavLink }                          from 'react-router-dom';
 
 // internal imports
 import AppContext                           from '../../utils/AppContext';
@@ -44,9 +45,11 @@ export default function ProductCard({ data, getProductId }) {
             <Button variant='outline' size='icon' onClick={() => getProductId(data.id)}>
               <Trash2/>
             </Button>
-            <Button variant='outline' size='icon'>
-              <FilePenLine/>
-            </Button>
+            <Link to={`/products/${data.id}`}>
+              <Button variant='outline' size='icon'>
+                <FilePenLine/>
+              </Button>
+            </Link>
           </div>
         )}
       </CardFooter>

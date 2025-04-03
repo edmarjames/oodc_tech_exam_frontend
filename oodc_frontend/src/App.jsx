@@ -12,6 +12,7 @@ import {
 // internal imports
 import { AppProvider }                      from './utils/AppContext';
 import Products from './components/core/Products';
+import ProductView from './components/core/ProductView';
 import Logout from './components/core/Logout';
 import './App.css';
 
@@ -45,6 +46,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Navigate to='/products'/>}/>
           <Route path='/products' element={<Products/>}/>
+          <Route path='/products/:productId' element={<ProductView/>}/>
           <Route path='/logout' element={<Logout/>}/>
         </Routes>
       </Router>

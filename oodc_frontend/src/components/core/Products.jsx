@@ -18,6 +18,7 @@ import AppContext                           from '../../utils/AppContext';
 import LoginModal from './LoginModal';
 import ConfirmModal from './ConfirmModal';
 import ProductCard from './ProductCard';
+import AddProductModal from './AddProductModal';
 
 
 export default function Products() {
@@ -25,6 +26,7 @@ export default function Products() {
   const [deleteId, setDeleteId] = useState(null);
   const [modalUsage, setModalUsage] = useState('logout');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const queryClient = useQueryClient();
   const observerRef = useRef();
@@ -72,17 +74,17 @@ export default function Products() {
   });
 
   const {
-      data,
-      fetchNextPage,
-      hasNextPage,
-      isFetchingNextPage,
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   } = useInfiniteQuery({
-      queryKey: ['products', 'infinite'],
-      getNextPageParam: (lastPage) => {
-          const nextPage = lastPage.next ? Number(new URL(lastPage.next).searchParams.get('page')) : undefined;
-          return nextPage;
-      },
-      queryFn: ({ pageParam }) => fetchProducts({ pageParam }),
+    queryKey: ['products', 'infinite'],
+    getNextPageParam: (lastPage) => {
+      const nextPage = lastPage.next ? Number(new URL(lastPage.next).searchParams.get('page')) : undefined;
+      return nextPage;
+    },
+    queryFn: ({ pageParam }) => fetchProducts({ pageParam }),
   });
 
   const flattenedData = data?.pages.flatMap(page => page.results) || [];
@@ -138,7 +140,7 @@ export default function Products() {
           <LoginModal/>
         ) : (
           <div className='flex items-center gap-2 mt-5 mr-7'>
-            <Button>Add product</Button>
+            <AddProductModal isModalOpen={isCreateModalOpen} setIsModalOpen={setIsCreateModalOpen}/>
             <ConfirmModal
               usage='logout'
               clickEvent={handleLogout}

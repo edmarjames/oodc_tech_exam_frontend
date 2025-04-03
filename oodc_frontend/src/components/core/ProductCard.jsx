@@ -28,11 +28,15 @@ export default function ProductCard({ data, getProductId }) {
         <CardDescription>{data.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <p>Available: <span
-          className={`font-bold ${data.in_stock ? 'text-green-500' : 'text-red-500'}` }>
-          {data.in_stock ? 'In Stock': 'Out of Stock'}
-          </span>
-        </p>
+        <div className='flex items-center justify-between'>
+          <p>Available: <span
+            className={`font-bold ${data.in_stock ? 'text-green-500' : 'text-red-500'}` }>
+            {data.in_stock ? 'In Stock': 'Out of Stock'}
+            </span>
+          </p>
+          <p className='text-sm'>{data.quantity} {data.quantity <= 1 ? 'item': 'items'} left</p>
+        </div>
+        <p className='mt-2'><span>&#8369;</span>{data.price}</p>
       </CardContent>
       <CardFooter>
         {user.isAdmin && (
